@@ -1,0 +1,47 @@
+# data files
+data/
+*.csv
+*.parquet
+*.xlsx
+
+# models
+models/
+*.pkl
+*.joblib
+*.h5
+
+# python cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# virtual environments
+venv/
+.venv/
+.env/
+
+# notebooks
+.ipynb_checkpoints/
+
+# IDE / editor
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# logs
+*.log
+*.tmp
+
+# test / build
+.coverage
+htmlcov/
+pytest_cache/
+build/
+dist/
+*.egg-info/
+
+# misc
+*.xml
