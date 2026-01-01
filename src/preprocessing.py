@@ -1,3 +1,7 @@
+import pandas as pd
+
+
+
 def ip_to_country_merge(fraud_df: pd.DataFrame, ip_df: pd.DataFrame) -> pd.DataFrame:
     """
     Merge fraud transactions with IP-to-country ranges using merge_asof.
