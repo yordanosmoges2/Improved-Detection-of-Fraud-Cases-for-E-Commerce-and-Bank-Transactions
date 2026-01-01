@@ -1,175 +1,166 @@
-Improved Detection of Fraud Cases for E-Commerce and Bank Transactions
+ Improved Detection of Fraud Cases for E-Commerce and Bank Transactions
 
-Author: Yordanos Moges
-Project: Fraud Detection for E-Commerce and Bank Transactions
-Company Context: Adey Innovations Inc.
+**Author:** Yordanos Moges  
+**Company Context:** Adey Innovations Inc.  
+**Project Type:** Machine Learning – Fraud Detection  
 
-📌 Project Overview
+---
 
-This project focuses on detecting fraudulent transactions in e-commerce and banking datasets using machine learning. Fraud detection is challenging due to extreme class imbalance and complex user behavior patterns.
+## 📌 Project Overview
 
-The project is organized into two main tasks:
+This project focuses on detecting fraudulent transactions in **e-commerce** and **banking** datasets using machine learning techniques. Fraud detection is a challenging problem due to **extreme class imbalance** and **complex user behavior patterns**.
 
-Task 1: Data understanding, exploratory data analysis (EDA), feature engineering, and preprocessing
+The project is structured into **three main tasks**:
 
-Task 2: Model training, ensemble methods, cross-validation, hyperparameter tuning, and model selection
+- **Task 1:** Data understanding, exploratory data analysis (EDA), feature engineering, and preprocessing  
+- **Task 2:** Model training, ensemble methods, cross-validation, hyperparameter tuning, and model selection  
+- **Task 3:** Model explainability using SHAP and actionable business insights  
 
-The final goal is to build reliable, well-evaluated fraud detection models while following best practices in machine learning and repository structure.
+The overall goal is to build **robust, well-evaluated, and explainable fraud detection models** while following best practices in machine learning and repository organization.
 
-📂 Project Structure
+---
+
+## 📂 Project Structure
+
 Improved-Detection-of-Fraud-Cases/
 │
 ├── data/
-│   └── raw/
-│       ├── Fraud_Data.csv
-│       ├── creditcard.csv
-│       └── IpAddress_to_Country.csv
+│ └── raw/
+│ ├── Fraud_Data.csv
+│ ├── creditcard.csv
+│ └── IpAddress_to_Country.csv
 │
 ├── notebooks/
-│   ├── task1.ipynb          # EDA, feature engineering, preprocessing
-│   ├── task2.ipynb          # Modeling, CV, tuning, model selection
-│   └── creditdata.ipynb
+│ ├── task1.ipynb # EDA, feature engineering, preprocessing
+│ ├── task2.ipynb # Modeling, CV, tuning, model selection
+│ ├── task3.ipynb # SHAP explainability and business insights
+│ └── creditdata.ipynb
 │
 ├── src/
-│   ├── eda.py               # Reusable EDA functions
-│   └── preprocessing.py    # Reusable preprocessing utilities
+│ ├── eda.py # Reusable EDA functions
+│ └── preprocessing.py # Reusable preprocessing utilities
 │
-├── models/                  # Saved models (placeholder)
-│   └── .gitkeep
+├── models/ # Saved models (placeholder)
+│ └── .gitkeep
 │
-├── reports/                 # Reports, figures, and results (placeholder)
-│   └── .gitkeep
+├── reports/ # Reports and figures (placeholder)
+│ └── .gitkeep
 │
-├── tests/                   # Future tests (placeholder)
-│   └── .gitkeep
+├── tests/ # Future tests (placeholder)
+│ └── .gitkeep
 │
 ├── .gitignore
 ├── requirements.txt
 └── README.md
 
-🧠 Task 1: Data Understanding & Preprocessing
-Objectives
 
-Understand dataset structure and quality
 
-Perform exploratory data analysis (EDA)
+## 🧠 Task 1: Data Understanding & Preprocessing
 
-Engineer meaningful behavioral and temporal features
+### Objectives
+- Understand dataset structure and data quality  
+- Perform exploratory data analysis (EDA)  
+- Engineer meaningful behavioral and temporal features  
+- Prepare a clean, model-ready dataset  
 
-Prepare a clean, model-ready dataset
+### Key Steps
+- Missing value and duplicate analysis  
+- Datetime conversion (`signup_time`, `purchase_time`)  
+- Feature engineering:
+  - Hour of day
+  - Day of week
+  - Time since signup
+  - Transaction count per user
+  - IP address to country mapping  
+- One-hot encoding of categorical variables  
+- Feature scaling  
+- Stratified train–test split  
 
-Key Steps
+Reusable preprocessing and EDA logic is implemented in:
+- `src/eda.py`
+- `src/preprocessing.py`
 
-Missing value and duplicate analysis
+---
 
-Datetime conversion (signup_time, purchase_time)
+## ⚖️ Handling Class Imbalance
 
-Feature engineering:
+Fraud detection datasets are **highly imbalanced**, with fraudulent transactions forming a very small minority.
 
-Hour of day
+To address this issue:
 
-Day of week
+- **SMOTE (Synthetic Minority Oversampling Technique)** is applied **only on the training set**
+- This avoids data leakage and ensures fair evaluation
 
-Time since signup
+After applying SMOTE:
+- **Class 0 (Non-Fraud):** 93,502  
+- **Class 1 (Fraud):** 93,502  
 
-Transaction count per user
+---
 
-IP address to country mapping
+## 🤖 Task 2: Modeling, Cross-Validation & Model Selection
 
-One-hot encoding of categorical features
+### Models Trained
+- Logistic Regression (baseline and interpretable)
+- Random Forest (ensemble)
+- Gradient Boosting (ensemble)
 
-Feature scaling
+### Cross-Validation
+- Stratified 5-fold cross-validation
+- Evaluation metrics:
+  - ROC-AUC
+  - F1-score
+  - Recall  
 
-Stratified train–test split
+Mean and standard deviation of metrics are reported for each model.
 
-Reusable code is implemented in:
+### Hyperparameter Tuning
+- `RandomizedSearchCV` applied to:
+  - Random Forest
+  - Gradient Boosting  
+- Optimization target: **ROC-AUC**
 
-src/eda.py
+### Model Selection
+- Logistic Regression offers interpretability but weaker fraud detection performance
+- Ensemble models significantly improve fraud recall and overall performance
 
-src/preprocessing.py
+Final model selection is based on:
+- Cross-validated ROC-AUC
+- Fraud-class recall and F1-score
+- Stability across folds
 
-⚖️ Handling Class Imbalance
+Final evaluation is performed on a **held-out test set**.
 
-Fraud data is highly imbalanced, with fraudulent transactions forming a small minority.
+---
 
-To address this:
+## 🔍 Task 3: Model Explainability with SHAP
 
-SMOTE (Synthetic Minority Oversampling Technique) is applied only to the training set
+To interpret model predictions and understand fraud drivers:
 
-This avoids data leakage and ensures fair evaluation
+- Built-in Random Forest feature importance is extracted
+- SHAP global feature importance is visualized
+- SHAP force plots are generated for:
+  - True Positive (correctly detected fraud)
+  - False Positive (legitimate transaction flagged as fraud)
+  - False Negative (missed fraud case)
 
-After SMOTE:
+This analysis provides transparency and supports actionable business decisions.
 
-Class 0: 93,502
+---
 
-Class 1: 93,502
-
-🤖 Task 2: Modeling, Cross-Validation & Model Selection
-Models Trained
-
-Logistic Regression (baseline, interpretable)
-
-Random Forest (ensemble)
-
-Gradient Boosting (ensemble)
-
-Cross-Validation
-
-Stratified 5-fold cross-validation
-
-Metrics evaluated:
-
-ROC-AUC
-
-F1-score
-
-Recall
-
-Mean and standard deviation of metrics are reported for each model
-
-Hyperparameter Tuning
-
-RandomizedSearchCV applied to:
-
-Random Forest
-
-Gradient Boosting
-
-Optimization target: ROC-AUC
-
-Best estimators selected based on cross-validated performance
-
-Model Selection
-
-Logistic Regression provides interpretability but weaker fraud-class performance
-
-Ensemble models significantly improve fraud detection metrics
-
-The final model is selected based on:
-
-Cross-validated ROC-AUC
-
-Fraud recall and F1-score
-
-Stability across folds
-
-Final evaluation is performed on a held-out test set.
-
-📊 Evaluation Metrics
+## 📊 Evaluation Metrics
 
 Models are evaluated using:
+- Confusion Matrix
+- Precision, Recall, F1-score
+- ROC-AUC
 
-Confusion Matrix
+Special emphasis is placed on **fraud recall**, due to the high cost of missed fraudulent transactions.
 
-Precision, Recall, F1-score
+---
 
-ROC-AUC
+## 📦 Dependencies
 
-Special emphasis is placed on fraud recall due to the high cost of false negatives.
-
-📦 Dependencies
-
-All dependencies are listed in requirements.txt:
+All dependencies are listed in `requirements.txt`:
 
 pandas==2.1.0
 numpy==1.26.0
@@ -180,12 +171,11 @@ imblearn==0.11.1
 jupyter==2.4.0
 
 
-Install with:
+Install dependencies with:
 
+```bash
 pip install -r requirements.txt
-
 ▶️ How to Run
-
 Clone the repository
 
 Install dependencies
@@ -198,25 +188,25 @@ notebooks/task1.ipynb
 
 notebooks/task2.ipynb
 
-✅ Project Status
+notebooks/task3.ipynb
 
+✅ Project Status
 ✔ Task 1 completed (EDA & preprocessing)
 
-✔ Task 2a completed (model training)
+✔ Task 2 completed (model training, CV & tuning)
 
-✔ Task 2b completed (cross-validation & tuning)
+✔ Task 3 completed (SHAP explainability)
 
 ✔ Repository follows best practices
 
 ✔ Ready for further optimization and deployment
 
 🚀 Future Improvements
-
-Add SHAP-based model explainability
-
 Persist trained models in models/
 
 Add automated tests
 
 Deploy as an API or batch scoring pipeline
+
+
 
